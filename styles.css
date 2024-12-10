@@ -54,7 +54,7 @@ button{
     border-radius: 10px;
     width: 10em;
     background-image: url(priedai/metal.jpg);
-    background-position: center;
+    background-size: cover;
     color: white;
 }
 
@@ -75,31 +75,34 @@ button{
     display: inline-block;
 }
 
-#settings-btn {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    border-radius: 5px;
+.settings {
+    position: absolute; 
+    top: 10px; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    z-index: 1000; 
 }
 
 #settings-menu {
     display: none;
     position: absolute;
+    top: 50px;
+    left: 50%; 
+    transform: translateX(-50%);
     background-color: white;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     padding: 10px;
-    z-index: 100;
-    border-radius: 10px;
-    
+    z-index: 1000;
+    border-radius: 5px;
+    background-image: url(priedai/metal.jpg);
+    background-size: cover;
 }
 
 #settings-menu label {
     margin-right: 10px;
     font-size: 14px;
     font-weight: bold;
+    
 }
 
 #volume-slider {
