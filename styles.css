@@ -15,15 +15,14 @@ body {
 }
 
 .factory {
-    background-image: url(priedai/metal.jpg);
-    background-size: contain;
-    padding: 2em;
-    margin: 2em;
+    justify-content: center;
+    padding: 1em;
+    margin: 1em;
     color: white;
     text-align: center;
 }
 .factory img{
-    width: 9em;
+    width: 7.3em;
     display: flex;
 }
 
