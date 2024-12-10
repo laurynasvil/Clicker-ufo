@@ -97,8 +97,8 @@ window.addEventListener("load", function () {
         let randomX = Math.random() * maxWidth;
         let randomY = Math.random() * maxHeight;
 
-        clickZone.style.left = randomX + "px";
-        clickZone.style.top = randomY + "px";
+        clickZone.style.left = randomX + "%";
+        clickZone.style.top = randomY + "%";
     }
     setInterval(moveClickZone, 2000);
 
