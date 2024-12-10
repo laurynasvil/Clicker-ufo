@@ -1,17 +1,19 @@
 html, body {
     padding: 0;
     margin: 0;
+  
 }
 
 body {
     background-image: url(priedai/space.jpg);
+    
 }
 
 .game {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    min-height: 100vh;
+    max-height: 90vh;
 }
 
 .factory {
@@ -56,3 +58,54 @@ button{
     color: white;
 }
 
+.volume-control {
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+#volume-slider {
+    width: 200px;
+}
+
+.settings {
+    position: relative;
+    display: inline-block;
+}
+
+#settings-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+#settings-menu {
+    display: none;
+    position: absolute;
+    background-color: white;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    z-index: 100;
+    border-radius: 10px;
+    
+}
+
+#settings-menu label {
+    margin-right: 10px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+#volume-slider {
+    width: 150px;
+}
+
+.hidden {
+    display: none;
+}

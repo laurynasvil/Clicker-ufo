@@ -7,6 +7,14 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <div class="settings">
+        <button id="settings-btn">Settings</button>
+        <div id="settings-menu" class="hidden">
+            <label for="volume-slider">Volume:</label>
+            <input id="volume-slider" type="range" min="0" max="1" step="0.1" value="0.5">
+        </div>
+    </div>
+    <audio id="click-sound" src="priedai/retro-laser-1-236669.mp3"></audio>
     
     <div class="game">
         <div class="factories-left">
@@ -72,7 +80,7 @@
             </div>
             <div class="factory">
                 <h3>
-                    <img src="priedai/Starshot_Rifle_transparent.png" alt="Quantum Raycaster">
+                    <img src="priedai/minispace_cropped.png" alt="Quantum Raycaster">
                     <span class="title">Quantum Raycaster</span>
                     <span class="count">(0)</span>
                 </h3>
@@ -82,7 +90,7 @@
             </div>
         </div>
     </div>
-    <audio id="click-sound" src="priedai/retro-laser-1-236669.mp3"></audio>
+    
     <script src="scripts.js"></script>
 </body>
 </html>

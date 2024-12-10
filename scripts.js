@@ -1,11 +1,26 @@
 window.addEventListener("load", function () {
-    let scoreBlock = document.querySelector(".main-game .score");
-    let clickZone = document.querySelector(".main-game .click-zone");
+    const settingsBtn = document.getElementById("settings-btn");
+    const settingsMenu = document.getElementById("settings-menu");
+    const volumeSlider = document.getElementById("volume-slider");
+    const clickSound = document.getElementById("click-sound");
+    const clickZone = document.querySelector(".main-game .click-zone");
+    const scoreBlock = document.querySelector(".main-game .score");
     let score = 0;
     let ownedFactories = [];
 
-    let clickSound = document.getElementById("click-sound");
-
+    settingsBtn.addEventListener("click", function () {
+        if (settingsMenu.classList.contains("hidden")) {
+            settingsMenu.classList.remove("hidden");
+            settingsMenu.style.display = "block";
+        } else {
+            settingsMenu.classList.add("hidden");
+            settingsMenu.style.display = "none";
+        }
+    });
+    
+    volumeSlider.addEventListener("input", function () {
+        clickSound.volume = volumeSlider.value; // Atitinka slankiklio reikšmę
+    });
     clickZone.onclick = function () {
         score += 10;
         scoreBlock.innerText = score;
@@ -20,7 +35,6 @@ window.addEventListener("load", function () {
         const maxWidth = gameArea.clientWidth - clickZone.offsetWidth;
         const maxHeight = gameArea.clientHeight - clickZone.offsetHeight;
 
-       
         const randomX = Math.random() * maxWidth;
         const randomY = Math.random() * maxHeight;
 
