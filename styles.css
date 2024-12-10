@@ -4,7 +4,7 @@ html, body {
 }
 
 body {
-    background-color: brown;
+    background-image: url(priedai/space.jpg);
 }
 
 .game {
@@ -25,13 +25,15 @@ body {
 }
 
 .main-game .click-zone {
-    background: red;
-    width: 500px;
-    height: 500px;
+    background-image: url(priedai/ufo.png);
+    background-size: contain;
+    width: 200px;
+    height: 200px;
     cursor: pointer;
 }
 
 .main-game .score{
-    font-size: 2em;
+    font-size: 3em;
     margin: 1em;
+    color: red;
 } 
