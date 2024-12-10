@@ -15,9 +15,16 @@ body {
 }
 
 .factory {
-    background-color: aliceblue;
+    background-image: url(priedai/metal.jpg);
+    background-size: contain;
     padding: 2em;
     margin: 2em;
+    color: white;
+    text-align: center;
+}
+.factory img{
+    width: 9em;
+    display: flex;
 }
 
 .main-game {
