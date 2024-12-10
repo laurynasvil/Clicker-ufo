@@ -4,10 +4,14 @@ window.addEventListener("load", function () {
     let score = 0;
     let ownedFactories = [];
 
-    
+    let clickSound = document.getElementById("click-sound");
+
     clickZone.onclick = function () {
         score += 10;
         scoreBlock.innerText = score;
+
+        clickSound.currentTime = 0; 
+        clickSound.play();
     };
 
     
@@ -55,6 +59,5 @@ window.addEventListener("load", function () {
         scoreBlock.innerText = score;
     }, 1000);
 
-    
     moveClickZone();
 });
