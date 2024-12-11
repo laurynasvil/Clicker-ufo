@@ -12,6 +12,17 @@ body {
     background-position: center;
 }
 
+
+
+
+.content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
 .game {
     display: flex;
     justify-content: space-between;
@@ -23,7 +34,7 @@ body {
     justify-content: center;
     padding: 1em;
     margin: 1em;
-    color: rgb(9, 173, 83);
+    color: rgb(255, 230, 0);
     text-align: center;
 }
 
@@ -39,9 +50,9 @@ body {
 
 .main-game .click-zone {
     background-image: url(priedai/ufo.png);
-    background-size: contain;
+    background-size: cover;
     width: 200px;
-    height: 200px;
+    height: 140px;
     cursor: pointer;
     position: absolute;
     transition: top 0.5s, left 0.5s;

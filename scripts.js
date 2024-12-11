@@ -14,11 +14,11 @@ window.addEventListener("load", function () {
     }
 
     let score = 0;
-    let level = 1; 
-    let maxLevel = 6; 
+    let level = 1;
+    let maxLevel = 6;
     let gameRunning = true;
     let ownedFactories = [];
-    let weaponsPerLevel = {}; 
+    let weaponsPerLevel = {};
 
     const levelThresholds = [15000, 300000, 500000, 1000000, 3000000];
 
@@ -33,16 +33,16 @@ window.addEventListener("load", function () {
     });
 
     volumeSlider.addEventListener("input", function () {
-        clickSound.volume = volumeSlider.value; 
+        clickSound.volume = volumeSlider.value;
     });
 
     let weapons = [
-        "Lazer Toy",       
-        "Photon Blaster",  
-        "Plasma Shredder", 
-        "Nebula Beam",     
-        "Starshot Rifle",  
-        "Quantum Raycaster" 
+        "Lazer Toy",
+        "Photon Blaster",
+        "Plasma Shredder",
+        "Nebula Beam",
+        "Starshot Rifle",
+        "Quantum Raycaster"
     ];
 
     function unlockWeapon(level) {
@@ -57,7 +57,7 @@ window.addEventListener("load", function () {
 
     function initializeLevel() {
         levelBlock.innerText = level;
-        unlockWeapon(level); 
+        unlockWeapon(level);
         weaponsPerLevel[level] = 0;
     }
 
@@ -65,8 +65,8 @@ window.addEventListener("load", function () {
         if (level < maxLevel && score >= levelThresholds[level - 1]) {
             level++;
             levelBlock.innerText = level;
-            unlockWeapon(level); 
-            weaponsPerLevel[level] = 0; 
+            unlockWeapon(level);
+            weaponsPerLevel[level] = 0;
             alert(`Congratulations! You've reached Level ${level} and unlocked ${weapons[level - 1]}!`);
         }
     }
@@ -74,23 +74,18 @@ window.addEventListener("load", function () {
     clickZone.onclick = function () {
         if (!gameRunning) return;
 
-        score += 1;
+        score += level;
         scoreBlock.innerText = score;
         checkLevelUp();
-        clickSound.currentTime = 0; 
+        clickSound.currentTime = 0;
         clickSound.play();
     };
 
     function moveClickZone() {
         if (!gameRunning) return;
 
-        let gameArea = document.querySelector(".main-game");
-        if (!gameArea) {
-            console.error("Game area not found. Please add an element with the class 'main-game'.");
-            return;
-        }
-        let maxWidth = gameArea.clientWidth - clickZone.offsetWidth;
-        let maxHeight = gameArea.clientHeight - clickZone.offsetHeight;
+        let maxWidth = 100 - (clickZone.offsetWidth / window.innerWidth) * 100;
+        let maxHeight = 100 - (clickZone.offsetHeight / window.innerHeight) * 100;
 
         let randomX = Math.random() * maxWidth;
         let randomY = Math.random() * maxHeight;
@@ -113,35 +108,34 @@ window.addEventListener("load", function () {
         factory.button.onclick = function () {
             if (!gameRunning) return;
 
-            // 1. Check level first
             if (level < factory.requiredLevel) {
                 alert(`You need to reach Level ${factory.requiredLevel} to purchase this weapon.`);
                 return;
             }
 
-            // 2. Ensure weaponsPerLevel is initialized for the required level
             if (!weaponsPerLevel[factory.requiredLevel]) {
                 weaponsPerLevel[factory.requiredLevel] = 0;
             }
 
-            // 3. Check if max weapon limit is reached for the current level
             if (weaponsPerLevel[factory.requiredLevel] >= 20) {
                 alert(`You can only have 20 weapons in Level ${factory.requiredLevel}.`);
                 return;
             }
 
-            // 4. Check if there are enough points
             if (score < factory.costs) {
                 alert("Not enough points to purchase this weapon!");
                 return;
             }
 
-            // 5. Process the purchase
             score -= factory.costs;
             factory.count++;
-            weaponsPerLevel[factory.requiredLevel]++; // Increment weapons for the specific level
+            weaponsPerLevel[factory.requiredLevel]++;
             scoreBlock.innerText = score;
             fc.querySelector(".count").innerText = `(${factory.count})`;
+
+            factory.costs = Math.ceil(factory.costs * 1.1);
+            fc.querySelector(".price").innerText = factory.costs;
+
         };
         ownedFactories.push(factory);
     });
@@ -192,8 +186,3 @@ window.addEventListener("load", function () {
 
     timerInterval = setInterval(updateTimer, 1000);
 });
-
-
-
-
-
