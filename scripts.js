@@ -13,8 +13,7 @@ window.addEventListener("load", function () {
     let gameRunning = true;
     let ownedFactories = [];
     let weaponsPerLevel = {}; 
-
-   
+    
     const levelThresholds = [15000, 500000, 1000000, 2000000, 4000000, 6000000];
 
     settingsBtn.addEventListener("click", function () {
@@ -39,7 +38,6 @@ window.addEventListener("load", function () {
         "Starshot Rifle",  
         "Quantum Raycaster" 
     ];
-
     
     function unlockWeapon(level) {
         if (level <= weapons.length) {
@@ -49,13 +47,11 @@ window.addEventListener("load", function () {
         }
     }
 
-
     function initializeLevel() {
         levelBlock.innerText = level;
         unlockWeapon(level); 
         weaponsPerLevel[level] = 0;
     }
-
     
     function checkLevelUp() {
         if (level < maxLevel && score >= levelThresholds[level - 1]) {
@@ -67,7 +63,6 @@ window.addEventListener("load", function () {
         }
     }
 
-   
     function checkGameEnd() {
         if (score >= 7000000) {
             alert("Congratulations! You've reached 7,000,000 points and finished the game!");
@@ -86,7 +81,6 @@ window.addEventListener("load", function () {
         clickSound.play();
     };
 
-   
     function moveClickZone() {
         if (!gameRunning) return;
 
@@ -102,7 +96,6 @@ window.addEventListener("load", function () {
     }
     setInterval(moveClickZone, 2000);
 
-   
     document.querySelectorAll(".factory").forEach(function (fc, index) {
         let factory = {
             title: fc.querySelector(".title").innerText,
@@ -116,30 +109,34 @@ window.addEventListener("load", function () {
         factory.button.onclick = function () {
             if (!gameRunning) return;
 
-            
+            // 1. Check level first
+            if (level < factory.requiredLevel) {
+                alert(`You need to reach Level ${factory.requiredLevel} to purchase this weapon.`);
+                return;
+            }
+
+            // 2. Then check if max weapon limit is reached
             if (weaponsPerLevel[level] >= 20) {
                 alert(`You can only have 20 weapons in Level ${level}.`);
                 return;
             }
 
-            if (level >= factory.requiredLevel) {
-                if (score >= factory.costs) {
-                    score -= factory.costs;
-                    factory.count++;
-                    weaponsPerLevel[level]++;
-                    scoreBlock.innerText = score;
-                    fc.querySelector(".count").innerText = `(${factory.count})`;
-                } else {
-                    alert("Not enough points to purchase this weapon!");
-                }
-            } else {
-                alert(`You need to reach Level ${factory.requiredLevel} to purchase this weapon.`);
+            // 3. Finally check if there are enough points
+            if (score < factory.costs) {
+                alert("Not enough points to purchase this weapon!");
+                return;
             }
+
+            // 4. Process the purchase
+            score -= factory.costs;
+            factory.count++;
+            weaponsPerLevel[level]++;
+            scoreBlock.innerText = score;
+            fc.querySelector(".count").innerText = `(${factory.count})`;
         };
         ownedFactories.push(factory);
     });
 
-    
     setInterval(function () {
         if (!gameRunning) return;
 
