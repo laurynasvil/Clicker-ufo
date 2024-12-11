@@ -7,14 +7,20 @@ window.addEventListener("load", function () {
     let scoreBlock = document.querySelector("#score");
     let levelBlock = document.querySelector("#level");
     let weaponList = document.querySelector("#weapon-list");
+
+    if (!settingsBtn || !settingsMenu || !volumeSlider || !clickSound || !clickZone || !scoreBlock || !levelBlock || !weaponList) {
+        console.error("Some required elements are missing from the HTML. Please check the structure.");
+        return;
+    }
+
     let score = 0;
     let level = 1; 
     let maxLevel = 6; 
     let gameRunning = true;
     let ownedFactories = [];
     let weaponsPerLevel = {}; 
-    
-    const levelThresholds = [15000, 500000, 1000000, 2000000, 4000000, 6000000];
+
+    const levelThresholds = [15000, 300000, 500000, 1000000, 3000000];
 
     settingsBtn.addEventListener("click", function () {
         if (settingsMenu.classList.contains("hidden")) {
@@ -25,7 +31,7 @@ window.addEventListener("load", function () {
             settingsMenu.style.display = "none";
         }
     });
-    
+
     volumeSlider.addEventListener("input", function () {
         clickSound.volume = volumeSlider.value; 
     });
@@ -38,9 +44,11 @@ window.addEventListener("load", function () {
         "Starshot Rifle",  
         "Quantum Raycaster" 
     ];
-    
+
     function unlockWeapon(level) {
-        if (level <= weapons.length) {
+        const existingWeapons = Array.from(weaponList.children).map(li => li.textContent);
+
+        if (level <= weapons.length && !existingWeapons.includes(weapons[level - 1])) {
             let newWeapon = document.createElement("li");
             newWeapon.textContent = weapons[level - 1];
             weaponList.appendChild(newWeapon);
@@ -52,7 +60,7 @@ window.addEventListener("load", function () {
         unlockWeapon(level); 
         weaponsPerLevel[level] = 0;
     }
-    
+
     function checkLevelUp() {
         if (level < maxLevel && score >= levelThresholds[level - 1]) {
             level++;
@@ -63,20 +71,12 @@ window.addEventListener("load", function () {
         }
     }
 
-    function checkGameEnd() {
-        if (score >= 7000000) {
-            alert("Congratulations! You've reached 7,000,000 points and finished the game!");
-            gameRunning = false; 
-        }
-    }
-
     clickZone.onclick = function () {
         if (!gameRunning) return;
 
         score += 1;
         scoreBlock.innerText = score;
         checkLevelUp();
-        checkGameEnd();
         clickSound.currentTime = 0; 
         clickSound.play();
     };
@@ -85,14 +85,18 @@ window.addEventListener("load", function () {
         if (!gameRunning) return;
 
         let gameArea = document.querySelector(".main-game");
+        if (!gameArea) {
+            console.error("Game area not found. Please add an element with the class 'main-game'.");
+            return;
+        }
         let maxWidth = gameArea.clientWidth - clickZone.offsetWidth;
         let maxHeight = gameArea.clientHeight - clickZone.offsetHeight;
 
         let randomX = Math.random() * maxWidth;
         let randomY = Math.random() * maxHeight;
 
-        clickZone.style.left = randomX + "%";
-        clickZone.style.top = randomY + "%";
+        clickZone.style.left = `${randomX}%`;
+        clickZone.style.top = `${randomY}%`;
     }
     setInterval(moveClickZone, 2000);
 
@@ -115,22 +119,27 @@ window.addEventListener("load", function () {
                 return;
             }
 
-            // 2. Then check if max weapon limit is reached
-            if (weaponsPerLevel[level] >= 20) {
-                alert(`You can only have 20 weapons in Level ${level}.`);
+            // 2. Ensure weaponsPerLevel is initialized for the required level
+            if (!weaponsPerLevel[factory.requiredLevel]) {
+                weaponsPerLevel[factory.requiredLevel] = 0;
+            }
+
+            // 3. Check if max weapon limit is reached for the current level
+            if (weaponsPerLevel[factory.requiredLevel] >= 20) {
+                alert(`You can only have 20 weapons in Level ${factory.requiredLevel}.`);
                 return;
             }
 
-            // 3. Finally check if there are enough points
+            // 4. Check if there are enough points
             if (score < factory.costs) {
                 alert("Not enough points to purchase this weapon!");
                 return;
             }
 
-            // 4. Process the purchase
+            // 5. Process the purchase
             score -= factory.costs;
             factory.count++;
-            weaponsPerLevel[level]++;
+            weaponsPerLevel[factory.requiredLevel]++; // Increment weapons for the specific level
             scoreBlock.innerText = score;
             fc.querySelector(".count").innerText = `(${factory.count})`;
         };
@@ -144,9 +153,47 @@ window.addEventListener("load", function () {
             .map(x => x.count * x.isAdding)
             .reduce((partial_sum, number) => partial_sum + number, 0);
         scoreBlock.innerText = score;
-        checkGameEnd();
     }, 1000);
 
     initializeLevel();
     moveClickZone();
+
+    let startTime = Date.now();
+    let clickCount = 0;
+    let timerInterval;
+
+    const timerElement = document.createElement('div');
+    timerElement.style.position = 'fixed';
+    timerElement.style.bottom = '10px';
+    timerElement.style.left = '50%';
+    timerElement.style.transform = 'translateX(-50%)';
+    timerElement.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+    timerElement.style.color = 'white';
+    timerElement.style.padding = '10px';
+    timerElement.style.borderRadius = '5px';
+    document.body.appendChild(timerElement);
+
+    function formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+    }
+
+    function updateTimer() {
+        const elapsed = Math.floor((Date.now() - startTime) / 1000);
+        timerElement.textContent = `Time: ${formatTime(elapsed)} | Clicks: ${clickCount}`;
+    }
+
+    if (clickZone) {
+        clickZone.addEventListener('click', function () {
+            clickCount++;
+        });
+    }
+
+    timerInterval = setInterval(updateTimer, 1000);
 });
+
+
+
+
+
